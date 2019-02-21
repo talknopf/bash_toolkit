@@ -7,8 +7,12 @@ This wrapper will allow you to display colorful logging along with actual logfil
 tha basics of using the logs are:
 ```
 info "info message text"
+
 warn "warn message text"
+
 error "error message text"
+
+exit_on_error "error message text" "<exit code>"
 ```
 
 # Command line parsing and validation:
@@ -41,7 +45,8 @@ if the variable is not defined you will recieve an elborate error on it being mi
 just clone the repo to the location of your choosing
 
 # Testing the installation
-running the built-in test script will show you and example of the functions mentioned above
+running the built-in test script will show you and example of the functions mentioned above.
+this script will exit with an error, it should be doing that.
 ```
 ./bash_tools_tester.sh -t foo -r bar
 ```
