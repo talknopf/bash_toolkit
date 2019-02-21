@@ -14,13 +14,6 @@ echo "Log file: $LOG_FILE"
 
 exec 2> >(tee -a "$LOG_FILE") 
 
-red='\033[0;31m'
-green='\033[0;32m'
-cyan='\033[0;36m'
-orange='\033[0;33m'
-purple='\033[0;35m'
-NC='\033[0m' # No Color
-
 _SYS_FUNC_NAMES=',get_func_name,log,warn,info,error,exit_on_error,validate_args,_redirect_2_log,redirect_2_log,'    
 HOSTNAME_PREFIX=[`hostname`]
 
@@ -41,14 +34,14 @@ function get_func_name() {
     set -x
 }
 
-function _redirect_2_log() {
+function redirect_2_log() {
 
     while read IN ; do 
-        log REMOTE_STDOUT "$orange" ">>STDIN Redirect>> $IN"
+        bash_log REMOTE_STDOUT "$orange" ">>STDIN Redirect>> $IN"
     done 
 }
 
-[[ ! `type -t log` ]] && function log() { 
+function bash_log() { 
     local msg="$(date +%d-%m-%Y_%H-%M-%S) $HOSTNAME_PREFIX [$(get_func_name)] $1 $3"  
     if [ $1 == "REMOTE_STDOUT" ]; then
         [[ "$NOISE" != 'true' ]] || echo -e "$2$msg${NC}" 
@@ -60,15 +53,20 @@ function _redirect_2_log() {
 }
 
 info() {
-    log INFO "$green" "$*"
+    bash_log INFO "$green" "$*"
 }
 
 warn() {
-    log WARN "$cyan" "$*"
+    bash_log WARN "$cyan" "$*"
 }
 
 error() {
-    log ERROR "$red" "$*"
+    bash_log ERROR "$red" "$*"
+}
+
+function package_workspace() { 
+    cd $ROOT_DIR ; bash -c "tar cvfz $1 `ls -1 $ROOT_DIR |grep -v git | xargs`"
+    error "an Error had occurred check logs `[[ $TGZ_PATH ]] && echo "(artifact $TGZ_PATH)"`!"
 }
 
 function exit_on_error() {

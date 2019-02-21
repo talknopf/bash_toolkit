@@ -37,9 +37,14 @@ when before you needed to validate in such manner: `[[ $VAR1 ]] || exit 1`
 now you can validate by using the validate_args "VAR1" "VAR2"
 if the variable is not defined you will recieve an elborate error on it being missing
 
-
 # Installation
 just clone the repo to the location of your choosing
+
+# Testing the installation
+running the built-in test script will show you and example of the functions mentioned above
+```
+./bash_tools_tester.sh -t foo -r bar
+```
 
 # How to use?
 source /path/to/folder/bash_toolkit.sh
